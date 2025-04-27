@@ -56,14 +56,15 @@ def create_paragraph(block):
     return ParentNode("p", children)
 
 def create_quote(block):
-    quote_lst = []
     lines = block.split("\n")
-
+    new_lines = []
     for line in lines:
-        children = text_to_children(line[1:])
-        quote_lst.append(ParentNode("blockquote", children))
-
-    return ParentNode("div", quote_lst)
+        if not line.startswith(">"):
+            raise ValueError("invalid quote block")
+        new_lines.append(line.lstrip(">").strip())
+    content = " ".join(new_lines)
+    children = text_to_children(content)
+    return ParentNode("blockquote", children)
 
 def create_ulist(block):
     lines = block.split("\n")

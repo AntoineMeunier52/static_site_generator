@@ -24,9 +24,38 @@ def del_public_dir():
         print("delete public")
         shutil.rmtree("public")
 
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        if line.startswith("# "):
+            return line[2:]
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    f_markdown = open(from_path)
+    f_template = open(template_path)
+
+    content_markdown = f_markdown.read()
+    content_template = f_template.read()
+
+    f_markdown.close()
+    f_template.close()
+
+    html_node = markdown_to_html(content_markdown)
+    html_content = html_node.to_html()
+
+    page_title = extract_title(content_markdown)
+
+    content_template_with_title = content_template.replace("{{ Title }}", page_title)
+    new_html = content_template_with_title.replace("{{ Content }}", html_content)
+
+    with open(dest_path, "x") as f:
+        f.write(new_html)
+
 def main():
     del_public_dir()
     create_public_dir("static", "public")
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 if __name__ == "__main__":
     main()
