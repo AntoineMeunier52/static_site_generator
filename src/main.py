@@ -49,13 +49,20 @@ def generate_page(from_path, template_path, dest_path):
     content_template_with_title = content_template.replace("{{ Title }}", page_title)
     new_html = content_template_with_title.replace("{{ Content }}", html_content)
 
-    with open(dest_path, "x") as f:
-        f.write(new_html)
+    dest_dir_path = os.path.dirname(dest_path)
+    if dest_dir_path != "":
+        os.makedirs(dest_dir_path, exist_ok=True)
+    to_file = open(dest_path, "w")
+    to_file.write(new_html)
 
 def main():
     del_public_dir()
     create_public_dir("static", "public")
     generate_page("content/index.md", "template.html", "public/index.html")
+    generate_page("content/blog/glorfindel/index.md", "template.html", "public/blog/glorfindel/index.html")
+    generate_page("content/blog/tom/index.md", "template.html", "public/blog/tom/index.html")
+    generate_page("content/blog/majesty/index.md", "template.html", "public/blog/majesty/index.html")
+    generate_page("content/contact/index.md", "template.html", "public/contact/index.html")
 
 if __name__ == "__main__":
     main()
