@@ -58,16 +58,29 @@ def check_ordered(text):
         count_line += 1
     return True
 
-def block_to_block_type(text):
-    if check_headings(text):
+def block_to_block_type(block):
+    lines = block.split("\n")
+
+    if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return BlockType.HEADING
-    if check_code(text):
+    if len(lines) > 1 and lines[0].startswith("```") and lines[-1].startswith("```"):
         return BlockType.CODE
-    if check_quote(text):
+    if block.startswith(">"):
+        for line in lines:
+            if not line.startswith(">"):
+                return BlockType.PARAGRAPH
         return BlockType.QUOTE
-    if check_unordered(text):
+    if block.startswith("- "):
+        for line in lines:
+            if not line.startswith("- "):
+                return BlockType.PARAGRAPH
         return BlockType.ULIST
-    if check_ordered(text):
+    if block.startswith("1. "):
+        i = 1
+        for line in lines:
+            if not line.startswith(f"{i}. "):
+                return BlockType.PARAGRAPH
+            i += 1
         return BlockType.OLIST
     return BlockType.PARAGRAPH
 
