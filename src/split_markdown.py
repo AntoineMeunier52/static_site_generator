@@ -1,15 +1,6 @@
 from textnode import TextNode, TextType
 import re
 
-def markdown_to_blocks(markdown):
-    lst_blocks = []
-    split_markdown = markdown.split("\n\n")
-    for line in split_markdown:
-        if line == "":
-            continue
-        lst_blocks.append(line.strip())
-    return lst_blocks
-
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_node = []
 
