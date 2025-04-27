@@ -38,7 +38,7 @@ def main():
         basepath = sys.argv[1]
 
     del_public_dir()
-    create_public_dir("static", "public")
+    create_public_dir(dir_path_static, dir_path_public)
 
     generate_pages_recursive(dir_path_content, template_path, dir_path_public, basepath)
 
