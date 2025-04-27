@@ -50,7 +50,9 @@ def create_heading(block):
     return ParentNode(tag, children)
 
 def create_paragraph(block):
-    children = text_to_children(block)
+    lines = block.split("\n")
+    para = " ".join(lines)
+    children = text_to_children(para)
     return ParentNode("p", children)
 
 def create_quote(block):
@@ -84,12 +86,11 @@ def create_olist(block):
     return ParentNode("ol", li_lst)
 
 def create_code(block):
-    leaf = LeafNode("pre", block[3:-3])
-    return ParentNode("code", [leaf])
+    leaf = LeafNode("code", block[3:-3])
+    return ParentNode("pre", [leaf])
 
 def block_to_node(block):
     block_type = block_to_block_type(block)
-    print(block_type)
     if block_type == BlockType.HEADING:
         return create_heading(block)
     if block_type == BlockType.PARAGRAPH:
@@ -107,9 +108,7 @@ def block_to_node(block):
 def markdown_to_html(markdown):
     blocks = markdown_to_blocks(markdown)
     node_blocks = []
-    print(blocks)
     for block in blocks:
         node_blocks.append(block_to_node(block))
-    div_node = ParentNode("div", node_blocks)
-    print(div_node.to_html())
+    return ParentNode("div", node_blocks)
 
